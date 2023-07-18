@@ -54,7 +54,7 @@ public class Process {
 	 */
 	public void incrementInstruction(int clockTimeElapsed) {
 		this.pcb.programCounter++;
-		this.pcb.cyclesExecuted = clockTimeElapsed + 1 % 2 == 0 ? 0 : 1;
+		this.pcb.cyclesExecuted = clockTimeElapsed; //clockTimeElapsed + 1 % 2 == 0 ? 0 : 1;
 	}
 	
 	

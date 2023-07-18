@@ -45,11 +45,24 @@ public class CPU {
 		// while we still have process waiting in these queues, the CPU should not stop
 		while (!(readyQueue.isEmpty() && waitingQueue.isEmpty() && io1.waitingQueue.isEmpty() && io2.waitingQueue.isEmpty() && this.runningProcess == null) ) {
 			System.out.println("cpu counter: " + cpuCounter );
+			
+			if(!waitingQueue.isEmpty()) {
+				System.out.println(printSystemInfo());
+				if((cpuCounter + 1) % 2 == 0) {
+					cpuCounter = 0;
+				}else {
+					++cpuCounter;
+				}
+				manageIOQueues();
+				continue;
+			}
+			
 			if (runningProcess == null && !readyQueue.isEmpty()) {
 				readyToRunning();
 			}
 			
-			if (runningProcess == null && !waitingQueue.isEmpty()) {
+			//THis become useless cause of the first if
+			/**if (runningProcess == null && !waitingQueue.isEmpty()) {
 				System.out.println(printSystemInfo());
 				manageIOQueues();
 				if((cpuCounter + 1) % 2 == 0) {
@@ -59,7 +72,7 @@ public class CPU {
 				}
 				continue;
 				
-			}
+			}**/
 
 			// executing an instruction:
 			r1 = ThreadLocalRandom.current().nextInt(min, max + 1);
@@ -116,10 +129,10 @@ public class CPU {
 			
 			if((cpuCounter + 1) % 2 == 0) {
 				runningProcess.incrementInstruction(cpuCounter);
+				System.out.println(printSystemInfo());
 				runningToReady();
 				readyToRunning();
 				cpuCounter = 0;
-				System.out.println(printSystemInfo());
 
 			} else {
 				runningProcess.incrementInstruction(cpuCounter);
@@ -164,17 +177,21 @@ public class CPU {
 						if ((io1Counter + 1) % 5 == 0) {
 							System.out.println("Io request successfull on IO1");
 							Process temProcess = io1.waitingQueue.poll();
-							temProcess.stateToReady();
-							this.readyQueue.add(this.waitingQueue.poll());
-							io1Counter = 0;
+							temProcess.stateToRunning();
+							this.runningProcess = this.waitingQueue.poll();
+							this.cpuCounter = this.runningProcess.pcb.cyclesExecuted;
+							this.io1Counter = 0;
+							return;
 						}
 						// check if the 5 time units are fulfilled for the IODevice 2
 						if ((io2Counter + 1)  % 5 == 0) {
 							System.out.println("Io request successfull on IO2");
 							Process temProcess = io2.waitingQueue.poll();
-							temProcess.stateToReady();
-							this.readyQueue.add(this.waitingQueue.poll());
-							io2Counter = 0;
+							temProcess.stateToRunning();
+							this.runningProcess = this.waitingQueue.poll();
+							this.cpuCounter = this.runningProcess.pcb.cyclesExecuted;
+							this.io2Counter = 0;
+							return;
 						}
 						
 						// then we check if the IO waiting queues are not empty, if they're not empty we increment their counter
@@ -262,7 +279,7 @@ public class CPU {
 	
 	public String printSystemInfo() {
 		return("\nIO1 counter: " + io1Counter + "\nIO2 counter: " + io2Counter + "\n\n" + cpuOutput() + "\n\n" + "Content of the IO device 1: \n" + this.io1.getWaitingQueueContent() + "\n" + 
-				"Content of the IO device 2: \n" + this.io2.getWaitingQueueContent() + "\n\n" + getProcessesPCBData()
+				"Content of the IO device 2: \n" + this.io2.getWaitingQueueContent() + "\n\n" + getProcessesPCBData() + "\n\n"
 				);
 	}
 	
