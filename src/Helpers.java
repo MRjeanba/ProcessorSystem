@@ -11,7 +11,7 @@ public class Helpers {
 	
 	public static int[] transformToIntArr(LinkedList<Integer> t) {
 		
-		if (t.size()!=1) {
+		if (t.size()!=0) {
 			int[] arr = new int[t.size()];
 			for (int i = 0; i < arr.length; i++) {
 				arr[i] = t.get(i);
@@ -54,7 +54,9 @@ public class Helpers {
 
 		// for each index of the above array, we create a process and add it to a list
 		for (int i = 0; i < arrayOfStringProcesses.length; i++) {
-			
+			int indexOfClosingBracket = arrayOfStringProcesses[i].indexOf("]");
+			arrayOfStringProcesses[i] = arrayOfStringProcesses[i].substring(0, indexOfClosingBracket + 1) + "," +  arrayOfStringProcesses[i].substring(indexOfClosingBracket + 1);
+
 			// variables of the process to fill in order to create the process
 			int arrayNumber = 0;
 			LinkedList<Integer> IORequestAtInstruction = new LinkedList<Integer>();
@@ -62,8 +64,7 @@ public class Helpers {
 			
 			String[] stringArr = arrayOfStringProcesses[i].split(",");
 			String id = stringArr[0];
-			int nOfInstruct = Integer.parseInt(stringArr[1].replace(" ", ""));
-
+			int nOfInstruct = Integer.parseInt(stringArr[1].trim());
 			for (int j = 0; j < stringArr.length; j++) {
 				
 				if(stringArr[j].contains("[")) {
@@ -71,29 +72,34 @@ public class Helpers {
 					String arrayBuilder = "";
 					// up to the closing bracket, we fill the array IORequestAtInstruction of the process
 					while (!stringArr[j].contains("]")) {
-						String tempString = stringArr[j].replace("[", "")+",";
 						arrayBuilder += stringArr[j].replace("[", "")+",";
 						++j;
 					}
-					arrayBuilder += stringArr[j].replace("]", "");
+					//arrayBuilder += stringArr[j].replace("]", "");
+					arrayBuilder += stringArr[j];
+					int index = arrayBuilder.indexOf("]");
+					arrayBuilder = arrayBuilder.substring(0, index);
 					++arrayNumber;
-					arrayBuilder = arrayBuilder.replace(" ", "");
-					
+					arrayBuilder = arrayBuilder.trim();
 					// array number is one, the we fill the IORequestAtInstruction array
 					if(arrayNumber == 1) {
 						if(arrayBuilder.length() != 1) {
 							String[] IORequestAtInstructionString = arrayBuilder.split(",");
-
+							
 							for (int k = 0; k < IORequestAtInstructionString.length; k++) {
-								IORequestAtInstruction.add(Integer.parseInt(IORequestAtInstructionString[k].replace(" ", "")));
+								System.out.println(IORequestAtInstructionString[k]);
+								IORequestAtInstruction.add(Integer.parseInt(IORequestAtInstructionString[k].trim().replace("[", "")));
 							}
+							System.out.println(IORequestAtInstruction.toString());
 						}
 					} else if (arrayNumber == 2) {
 						if(arrayBuilder.length() != 1) {
 							String[] IODevicesRequestedString = arrayBuilder.split(",");
 							for (int k = 0; k < IODevicesRequestedString.length; k++) {
-								IODevicesRequested.add(Integer.parseInt(IODevicesRequestedString[k].replace(" ", "")));
+								IODevicesRequested.add(Integer.parseInt(IODevicesRequestedString[k].trim().replace("[", "")));
 							}
+							System.out.println(IODevicesRequested.toString());
+
 						}
 						System.out.println("\n");
 					}

@@ -51,8 +51,8 @@ public class CPU {
 			}
 			
 			if (runningProcess == null && !waitingQueue.isEmpty()) {
-				manageIOQueues();
 				System.out.println(printSystemInfo());
+				manageIOQueues();
 				if((cpuCounter + 1) % 2 == 0) {
 					cpuCounter = 0;
 				}else {
@@ -99,8 +99,8 @@ public class CPU {
 					}
 					
 				}
-				manageIOQueues();
 				System.out.println(printSystemInfo());
+				manageIOQueues();
 				if((cpuCounter + 1) % 2 == 0) {
 					cpuCounter = 0;
 				}else {
@@ -111,19 +111,22 @@ public class CPU {
 				
 			}
 			
-			// Check if the IO waiting Queues are empty or not
-			manageIOQueues();
+
 			
 			if((cpuCounter + 1) % 2 == 0) {
 				runningProcess.incrementInstruction(cpuCounter);
 				System.out.println(printSystemInfo());
 				runningToReady();
 				readyToRunning();
+				// Check if the IO waiting Queues are empty or not
+				manageIOQueues();
 				cpuCounter = 0;
 
 			} else {
 				runningProcess.incrementInstruction(cpuCounter);
 				System.out.println(printSystemInfo());
+				// Check if the IO waiting Queues are empty or not
+				manageIOQueues();
 				cpuCounter++;
 			}
 			
