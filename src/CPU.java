@@ -142,7 +142,7 @@ public class CPU {
 			terminatedQueueContent += process.pcb.getPCBData();
 		}
 		
-		System.out.println("Content of the terminated queue: \n" + terminatedQueueContent);
+		System.out.println("\nContent of the terminated queue: \n" + terminatedQueueContent);
 	}
 	
 	/**
@@ -164,7 +164,7 @@ public class CPU {
 					if(!(io1.waitingQueue.isEmpty()) || !(io2.waitingQueue.isEmpty())){
 						
 						// check if the 5 time units are fulfilled for the IODevice 1
-						if ((io1Counter + 1) % 5 == 0) {
+						if ((io1Counter + 1) % 6 == 0) {
 							System.out.println("Io request successfull on IO1");
 							Process temProcess = io1.waitingQueue.poll();
 							temProcess.stateToReady();
@@ -172,7 +172,7 @@ public class CPU {
 							this.io1Counter = 0;
 						}
 						// check if the 5 time units are fulfilled for the IODevice 2
-						if ((io2Counter + 1)  % 5 == 0) {
+						if ((io2Counter + 1)  % 6 == 0) {
 							System.out.println("Io request successfull on IO2");
 							Process temProcess = io2.waitingQueue.poll();
 							temProcess.stateToReady();

@@ -85,12 +85,9 @@ public class Helpers {
 					if(arrayNumber == 1) {
 						if(arrayBuilder.length() != 1) {
 							String[] IORequestAtInstructionString = arrayBuilder.split(",");
-							
 							for (int k = 0; k < IORequestAtInstructionString.length; k++) {
-								System.out.println(IORequestAtInstructionString[k]);
 								IORequestAtInstruction.add(Integer.parseInt(IORequestAtInstructionString[k].trim().replace("[", "")));
 							}
-							System.out.println(IORequestAtInstruction.toString());
 						}
 					} else if (arrayNumber == 2) {
 						if(arrayBuilder.length() != 1) {
@@ -98,7 +95,6 @@ public class Helpers {
 							for (int k = 0; k < IODevicesRequestedString.length; k++) {
 								IODevicesRequested.add(Integer.parseInt(IODevicesRequestedString[k].trim().replace("[", "")));
 							}
-							System.out.println(IODevicesRequested.toString());
 
 						}
 						System.out.println("\n");
